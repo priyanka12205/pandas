@@ -24,7 +24,10 @@ from pandas.errors import (
     LossySetitemError,
 )
 from pandas.errors.cow import _chained_assignment_msg
-from pandas.util._decorators import doc
+from pandas.util._decorators import (
+    doc,
+    set_module,
+)
 
 from pandas.core.dtypes.cast import (
     can_hold_element,
@@ -98,7 +101,8 @@ _one_ellipsis_message = "indexer may only contain one '...' entry"
 
 
 # the public IndexSlicerMaker
-class _IndexSlice:
+@set_module("pandas")
+class IndexSlice:
     """
     Create an object to more easily perform multi-index slicing.
 
@@ -143,9 +147,6 @@ class _IndexSlice:
 
     def __getitem__(self, arg):
         return arg
-
-
-IndexSlice = _IndexSlice()
 
 
 class IndexingMixin:
