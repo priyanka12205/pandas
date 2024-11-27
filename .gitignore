@@ -137,3 +137,18 @@ doc/source/savefig/
 # Interactive terminal generated files #
 ########################################
 .jupyterlite.doit.db
+
+# Ignore virtual environments
+venv/
+pandas-env/
+.env/
+*.egg-info/
+build/
+# Ignore compiled files
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
