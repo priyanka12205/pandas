@@ -1099,6 +1099,13 @@ class Resampler(BaseGroupBy, PandasObject):
         Series or DataFrame
             Computed prod of values within each group.
 
+        See Also
+        --------
+        core.resample.Resampler.sum : Compute sum of groups, excluding missing values.
+        core.resample.Resampler.mean : Compute mean of groups, excluding missing values.
+        core.resample.Resampler.median : Compute median of groups, excluding missing
+            values.
+
         Examples
         --------
         >>> ser = pd.Series(
@@ -1129,9 +1136,30 @@ class Resampler(BaseGroupBy, PandasObject):
         """
         Compute min value of group.
 
+        Parameters
+        ----------
+        numeric_only : bool, default False
+            Include only float, int, boolean columns.
+
+            .. versionchanged:: 2.0.0
+
+                numeric_only no longer accepts ``None``.
+
+        min_count : int, default 0
+            The required number of valid values to perform the operation. If fewer
+            than ``min_count`` non-NA values are present the result will be NA.
+
         Returns
         -------
         Series or DataFrame
+            Compute the minimum value in the given Series or DataFrame.
+
+        See Also
+        --------
+        core.resample.Resampler.max : Compute max value of group.
+        core.resample.Resampler.mean : Compute mean of groups, excluding missing values.
+        core.resample.Resampler.median : Compute median of groups, excluding missing
+            values.
 
         Examples
         --------
@@ -1163,9 +1191,30 @@ class Resampler(BaseGroupBy, PandasObject):
         """
         Compute max value of group.
 
+        Parameters
+        ----------
+        numeric_only : bool, default False
+            Include only float, int, boolean columns.
+
+            .. versionchanged:: 2.0.0
+
+                numeric_only no longer accepts ``None``.
+
+        min_count : int, default 0
+            The required number of valid values to perform the operation. If fewer
+            than ``min_count`` non-NA values are present the result will be NA.
+
         Returns
         -------
         Series or DataFrame
+            Computes the maximum value in the given Series or Dataframe.
+
+        See Also
+        --------
+        core.resample.Resampler.min : Compute min value of group.
+        core.resample.Resampler.mean : Compute mean of groups, excluding missing values.
+        core.resample.Resampler.median : Compute median of groups, excluding missing
+            values.
 
         Examples
         --------
@@ -1239,6 +1288,16 @@ class Resampler(BaseGroupBy, PandasObject):
         DataFrame or Series
             Mean of values within each group.
 
+        See Also
+        --------
+        core.resample.Resampler.median : Compute median of groups, excluding missing
+            values.
+        core.resample.Resampler.sum : Compute sum of groups, excluding missing values.
+        core.resample.Resampler.std : Compute standard deviation of groups, excluding
+            missing values.
+        core.resample.Resampler.var : Compute variance of groups, excluding missing
+            values.
+
         Examples
         --------
 
@@ -1287,6 +1346,14 @@ class Resampler(BaseGroupBy, PandasObject):
         -------
         DataFrame or Series
             Standard deviation of values within each group.
+
+        See Also
+        --------
+        core.resample.Resampler.mean : Compute mean of groups, excluding missing values.
+        core.resample.Resampler.median : Compute median of groups, excluding missing
+            values.
+        core.resample.Resampler.var : Compute variance of groups, excluding missing
+            values.
 
         Examples
         --------
@@ -1338,6 +1405,14 @@ class Resampler(BaseGroupBy, PandasObject):
         -------
         DataFrame or Series
             Variance of values within each group.
+
+        See Also
+        --------
+        core.resample.Resampler.std : Compute standard deviation of groups, excluding
+            missing values.
+        core.resample.Resampler.mean : Compute mean of groups, excluding missing values.
+        core.resample.Resampler.median : Compute median of groups, excluding missing
+            values.
 
         Examples
         --------
