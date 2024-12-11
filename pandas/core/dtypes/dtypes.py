@@ -2274,26 +2274,31 @@ class ArrowDtype(StorageExtensionDtype):
 
     @cache_readonly
     def numpy_dtype(self) -> np.dtype:
-        """Return an instance of the related numpy dtype"""
-        if pa.types.is_timestamp(self.pyarrow_dtype):
-            # pa.timestamp(unit).to_pandas_dtype() returns ns units
-            # regardless of the pyarrow timestamp units.
-            # This can be removed if/when pyarrow addresses it:
-            # https://github.com/apache/arrow/issues/34462
-            return np.dtype(f"datetime64[{self.pyarrow_dtype.unit}]")
-        if pa.types.is_duration(self.pyarrow_dtype):
-            # pa.duration(unit).to_pandas_dtype() returns ns units
-            # regardless of the pyarrow duration units
-            # This can be removed if/when pyarrow addresses it:
-            # https://github.com/apache/arrow/issues/34462
-            return np.dtype(f"timedelta64[{self.pyarrow_dtype.unit}]")
-        if pa.types.is_string(self.pyarrow_dtype) or pa.types.is_large_string(
-            self.pyarrow_dtype
-        ):
-            # pa.string().to_pandas_dtype() = object which we don't want
+        """Return an instance of the related numpy dtype."""
+        pa_type = self.pyarrow_dtype
+
+        # handle tz-aware timestamps
+        if pa.types.is_timestamp(pa_type):
+            if pa_type.tz is not None:
+                # preserve tz by NOT calling numpy_dtype for this dtype.
+                return np.dtype("datetime64[ns]")
+            else:
+                # For tz-naive timestamps, just return the corresponding unit
+                return np.dtype(f"datetime64[{pa_type.unit}]")
+
+        if pa.types.is_duration(pa_type):
+            return np.dtype(f"timedelta64[{pa_type.unit}]")
+
+        if pa.types.is_string(pa_type) or pa.types.is_large_string(pa_type):
             return np.dtype(str)
+
         try:
-            return np.dtype(self.pyarrow_dtype.to_pandas_dtype())
+            np_dtype = pa_type.to_pandas_dtype()
+            if isinstance(np_dtype, DatetimeTZDtype):
+                # In theory we shouldn't get here for tz-aware arrow timestamps
+                # if we've handled them above. This is a fallback.
+                return np.dtype("datetime64[ns]")
+            return np.dtype(np_dtype)
         except (NotImplementedError, TypeError):
             return np.dtype(object)
 
